@@ -33,16 +33,21 @@ let rec readFromConsole () : Tree<int> =
 // Вывод структуры дерева
 let rec printTree indent (Node (v, children)) =
     printfn  "%s\%d" (String.replicate (indent) "  ") v
-    children |> List.iter (fun child -> printTree (indent + 2) child)
+    children |> List.iter 
+        (fun child -> printTree (indent + 2) child)
 
 // Функция fold для обхода дерева
 let rec foldTree f acc (Node (v, children)) =
     let newAcc = f acc v
-    List.fold (fun acc child -> foldTree f acc child) newAcc children
+    List.fold 
+        (fun acc child -> foldTree f acc child) newAcc children
 
 // Функция для сбора четных чисел
 let collectEvenNumbers tree =
-    foldTree (fun acc x -> if x % 2 = 0 then x :: acc else acc) [] tree
+    foldTree 
+        (fun acc x -> if x % 2 = 0 then 
+                                    x :: acc else acc
+                                    ) [] tree
 
 [<EntryPoint>]
 let main argv =

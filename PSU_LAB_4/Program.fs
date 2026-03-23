@@ -34,13 +34,16 @@ let rec readFromConsole () : Tree<string> =
 //Вывод структуры дерева
 let rec printTree indent (Node (v, children)) =
     printfn  "%s\%s" (String.replicate (indent) "  ") v
-    children |> List.iter (fun child -> printTree (indent + 2) child)
+    children |> List.iter (fun child -> 
+        printTree (indent + 2) child)
 
 // Ввод символа
 let rec readChar () =
-    printf "Введите символ, который нужно добавить в конец каждой строки: "
+    printf 
+        "Введите символ, для добавления в конец каждой строки:"
     let symbolLine = Console.ReadLine ()
-    if not (String.IsNullOrEmpty symbolLine) then symbolLine.[0]
+    if not (String.IsNullOrEmpty symbolLine) then 
+        symbolLine.[0]
     else
         printfn "Пустая строка — повторите ввод."
         readChar ()
