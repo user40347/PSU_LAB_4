@@ -7,6 +7,20 @@ type Tree<'a> =
 let rec map f (Node (v, children)) =
     Node(f v, List.map (map f) children)
 
+// Обработка вводимого положительного целого числа
+let rec readPositiveInt (prompt: string) =
+    printf "%s" prompt
+    match System.Console.ReadLine () with
+    | null | "" ->
+        printfn "Ошибка: введите целое число."
+        readPositiveInt prompt
+    | s ->
+        match System.Int32.TryParse s with
+        | true, v when v >= 0 -> v
+        | _ ->
+            printfn "Ошибка: введите число > 0."
+            readPositiveInt prompt
+
 // Проверка вводимого целого числа
 let rec readInt (prompt: string) =
     printf "%s" prompt
@@ -24,7 +38,7 @@ let rec readInt (prompt: string) =
 // Построение дерева целых чисел
 let rec readFromConsole () : Tree<int> =
     let value = readInt "Введите значение узла (число): "
-    let count = readInt $"Сколько потомков у узла {value}? "
+    let count = readPositiveInt $"Сколько потомков у узла {value}? "
     let children =
         [ for _ in 1 .. count do
             yield readFromConsole () ]
@@ -55,7 +69,6 @@ let main argv =
     let tree = readFromConsole ()
     printfn "\nИсходное дерево:"
     printTree 0 tree
-
     // Собираем четные числа
     let evenNumbers = collectEvenNumbers tree
     printfn "\nЧетные числа дерева: %A" evenNumbers

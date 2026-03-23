@@ -7,25 +7,25 @@ type Tree<'a> =
 let rec map f (Node (v, children)) =
     Node(f v, List.map (map f) children)
 
-// Проверка вводимого целого числа
-let rec readInt (prompt: string) =
+    // Обработка вводимого положительного целого числа
+let rec readPositiveInt (prompt: string) =
     printf "%s" prompt
     match System.Console.ReadLine () with
     | null | "" ->
         printfn "Ошибка: введите целое число."
-        readInt prompt
+        readPositiveInt prompt
     | s ->
         match System.Int32.TryParse s with
-        | true, v -> v
+        | true, v when v >= 0 -> v
         | _ ->
-            printfn "Ошибка: некорректный формат целого числа."
-            readInt prompt
+            printfn "Ошибка: введите число > 0."
+            readPositiveInt prompt
 
 //Построение дерева
 let rec readFromConsole () : Tree<string> =
     printf "Введите значение узла: "
     let value = Console.ReadLine ()
-    let count = readInt "Сколько потомков у этого узла? "
+    let count = readPositiveInt "Сколько потомков у этого узла? "
     let children =
         [ for _ in 1 .. count do
             yield readFromConsole () ]
